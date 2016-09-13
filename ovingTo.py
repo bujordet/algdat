@@ -11,12 +11,42 @@ class Node:
 
 
 def bygg(ordliste):
-    # SKRIV DIN KODE HER
+    nodes = Node()
+    place = 0
+    for ord in ordliste:
+        for bokstav in ord:
+            if bokstav not in nodes.barn:
+                nodes.barn[bokstav] = Node()
+            nodes = nodes.barn[bokstav]
+        nodes.posi.append(place)
+        place += 1
+    return nodes
 
+def bygg2(ordliste, root):
+    for ord in ordliste:
+        bygg_inner(ord, root)
+    return root
+
+def bygg_inner(word, node):
+    bokstav = word[0]
+    if bokstav not in node.barn:
+        node.barn[bokstav] = Node()
+    if word[1:]:
+        bygg_inner(word[1:], node.barn[bokstav])
 
 def posisjoner(ord, indeks, node):
-    # SKRIV DIN KODE HER
 
+    if indeks >= len(ord):
+        posi = node.posi
+    elif ord[indeks] == "?":
+        posi = []
+        for barn in node.barn.values():
+            posi = posisjoner(ord, indeks + 1, barn)
+    elif ord[indeks] in node.barn:
+        posi = posisjoner(ord, indeks + 1, node.barn[ord[indeks]])
+    else:
+        posi = []
+    return posi
 
 def main():
     try:
@@ -27,10 +57,12 @@ def main():
             ordliste.append((o, pos))
             pos += len(o) + 1
         toppnode = bygg(ordliste)
+        root = bygg2(ordliste, Node())
+
         for sokeord in stdin:
             sokeord = sokeord.strip()
             print("%s:" % sokeord, end='')
-            posi = posisjoner(sokeord, 0, toppnode)
+            posi = posisjoner(sokeord, 0, root)
             posi.sort()
             for p in posi:
                 print(" %s" % p, end='')
