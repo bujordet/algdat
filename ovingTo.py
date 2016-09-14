@@ -11,20 +11,19 @@ class Node:
 
 
 def bygg(ordliste):
-    nodes = Node()
-    place = 0
-    for ord in ordliste:
+    toppNode = Node()
+    for (ord, posisjon) in ordliste:
+        node = toppNode
         for bokstav in ord:
-            if bokstav not in nodes.barn:
-                nodes.barn[bokstav] = Node()
-            nodes = nodes.barn[bokstav]
-        nodes.posi.append(place)
-        place += 1
-    return nodes
+            if not bokstav in node.barn:
+                node.barn[bokstav] = Node()
+            node = node.barn[bokstav]
+        node.posi.append(posisjon)
+    return toppNode
 
 def bygg2(ordliste, root):
     for ord in ordliste:
-        bygg_inner(ord, root)
+        bygg_inner(ord[0], root)
     return root
 
 def bygg_inner(word, node):
@@ -41,7 +40,7 @@ def posisjoner(ord, indeks, node):
     elif ord[indeks] == "?":
         posi = []
         for barn in node.barn.values():
-            posi = posisjoner(ord, indeks + 1, barn)
+            posi += posisjoner(ord, indeks + 1, barn)
     elif ord[indeks] in node.barn:
         posi = posisjoner(ord, indeks + 1, node.barn[ord[indeks]])
     else:
@@ -62,7 +61,7 @@ def main():
         for sokeord in stdin:
             sokeord = sokeord.strip()
             print("%s:" % sokeord, end='')
-            posi = posisjoner(sokeord, 0, root)
+            posi = posisjoner(sokeord, 0, toppnode)
             posi.sort()
             for p in posi:
                 print(" %s" % p, end='')
