@@ -19,32 +19,53 @@ def bygg(ordliste):
                 node.barn[bokstav] = Node()
             node = node.barn[bokstav]
         node.posi.append(posisjon)
+        #print(node.posi)
     return toppNode
 
-def bygg2(ordliste, root):
+def bygg2(ordliste):
+    root = Node()
     for ord in ordliste:
-        bygg_inner(ord[0], root)
-    return root
+        node = root
+        bygg_inner(ord[0], node, ord[1])
 
-def bygg_inner(word, node):
-    bokstav = word[0]
+        #node.posi.append(ord[1])
+        #print(node.posi)
+
+    return root
+def lagePosisjoner(node, posisjon):
+    node.posi.append(posisjon)
+    print(node.posi)
+
+def bygg_inner(ord, node, posisjon):
+    word = ord[0]
+    bokstav = ord[0]
+    #tall += 1
+    #print(posisjon)
     if bokstav not in node.barn:
         node.barn[bokstav] = Node()
-    if word[1:]:
-        bygg_inner(word[1:], node.barn[bokstav])
 
-def posisjoner(ord, indeks, node):
+
+    if word[1:]:
+        bygg_inner(word[1:], node.barn[bokstav], posisjon)
+
+
+def posisjoner(ord, indeks, root):
+    #print(node)
 
     if indeks >= len(ord):
-        posi = node.posi
+        posi = root.posi
+        #print(posi)
     elif ord[indeks] == "?":
+        #print("lol")
         posi = []
-        for barn in node.barn.values():
+        for barn in root.barn.values():
             posi += posisjoner(ord, indeks + 1, barn)
-    elif ord[indeks] in node.barn:
-        posi = posisjoner(ord, indeks + 1, node.barn[ord[indeks]])
+    elif ord[indeks] in root.barn:
+        #print("lol")
+        posi = posisjoner(ord, indeks + 1, root.barn[ord[indeks]])
     else:
         posi = []
+    #rint(posi)
     return posi
 
 def main():
@@ -56,12 +77,12 @@ def main():
             ordliste.append((o, pos))
             pos += len(o) + 1
         toppnode = bygg(ordliste)
-        root = bygg2(ordliste, Node())
+        root = bygg2(ordliste)
 
         for sokeord in stdin:
             sokeord = sokeord.strip()
             print("%s:" % sokeord, end='')
-            posi = posisjoner(sokeord, 0, toppnode)
+            posi = posisjoner(sokeord, 0, root)
             posi.sort()
             for p in posi:
                 print(" %s" % p, end='')
