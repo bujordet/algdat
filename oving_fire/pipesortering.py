@@ -8,7 +8,6 @@ from sys import stdin
 def sort_list(usortert):
     # NOTICE: The sorted list must be returned.
     # SKRIV DIN KODE HER
-    print("hei")
     sorted_list = []
     for a in usortert:
         #print(a)
