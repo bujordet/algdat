@@ -28,39 +28,40 @@ def flexradix(A, d):
     # SKRIV DIN KODE HER
     #print(A)
     dic2 = {'d': 4, 'b': 2, 'p': 16, 'e': 5, 'j': 10, 'k': 11, 'm': 13, 'y': 25, 'a': 1, 'g': 7, 'n': 14,'q': 17, 'w': 23, 'r': 18, 'l': 12, 'x': 24, 'i': 9, 'f': 6, 'c': 3, 'v': 22, 't': 20, 'u': 21, 's': 19,'o': 15, 'z': 26, 'h': 8}
-    k = d
+
     #print(k)
     counting_list = []
     ge = 0
     vente_liste = []
-    a_videre = []
-    for element in A:
-        if (len(element) >= k):
-            ##print(element)
-            counting_list.append(dic2.get(element[k-1]))
-            if (dic2.get(element[k-1]) > ge):
-                ge = dic2.get(element[k-1])
-            vente_liste.append(element)
-        else:
-            a_videre.append(element)
 
-    if (len(counting_list) > 1):
-        counting_list = counting(counting_list, ge)
-    vente_liste2 = [0] * (len(vente_liste))
-    for i in counting_list:
-        for x in vente_liste:
-            if (dic2.get(x[k-1]) == i):
-                #print(x)
-                a_videre.append(x)
-                vente_liste.remove(x)
-                break
-    print(a_videre)
-    print(d)
-    d -= 1
-    if (d > 0):
-        flexradix(a_videre, d)
-    else:
-        return a_videre
+    while 0 < d:
+        k = d
+        a_videre = []
+        for element in A:
+            if (len(element) >= k):
+                ##print(element)
+                counting_list.append(dic2.get(element[k-1]))
+                if (dic2.get(element[k-1]) > ge):
+                    ge = dic2.get(element[k-1])
+                vente_liste.append(element)
+            else:
+                a_videre.append(element)
+
+        if (len(counting_list) > 1):
+            counting_list = counting(counting_list, ge)
+        vente_liste2 = [0] * (len(vente_liste))
+        for i in counting_list:
+            for x in vente_liste:
+                if (dic2.get(x[k-1]) == i):
+                    #print(x)
+                    a_videre.append(x)
+                    vente_liste.remove(x)
+                    break
+        print(a_videre)
+        print(d)
+        d -= 1
+
+    return a_videre
 
 def main():
     d = int(stdin.readline())
